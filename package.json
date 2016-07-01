@@ -1,0 +1,23 @@
+{
+  "name": "taxi-sms-proxy",
+  "version": "0.1.0",
+  "description": "An example Taxi SMS Proxy application to allow a driver and passenger to anonymously communicate with each other.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "taxi",
+    "sms",
+    "proxy",
+    "nexmo"
+  ],
+  "author": "Phil Leggetter <phil@leggetter.co.uk> (http://www.leggetter.co.uk)",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "nexmo": "^1.0.0-beta-5"
+  }
+}

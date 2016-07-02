@@ -13,8 +13,9 @@ var taxiSmsProxy = new TaxiSmsProxy();
 app.post('/booking', function(req, res) {
   var passengerRealNumber = req.body.passengerNumber;
   var driverRealNumber = req.body.driverNumber;
+  var bookingDetails = req.body.bookingDetails;
   
-  taxiSmsProxy.makeBooking(passengerRealNumber, driverRealNumber);
+  taxiSmsProxy.makeBooking(passengerRealNumber, driverRealNumber, bookingDetails);
   
   res.sendStatus(200);
 });

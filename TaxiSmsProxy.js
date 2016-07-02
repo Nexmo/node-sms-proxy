@@ -55,7 +55,7 @@ TaxiSmsProxy.prototype.configureNumber = function(number) {
   }.bind(this));
 };
 
-TaxiSmsProxy.prototype.makeBooking = function(passengerRealNumber, driverRealNumber) {
+TaxiSmsProxy.prototype.makeBooking = function(passengerRealNumber, driverRealNumber, details) {
   // Create booking object
   // For demo purposes:
   // - Use first indexed LVN for passenger
@@ -63,18 +63,34 @@ TaxiSmsProxy.prototype.makeBooking = function(passengerRealNumber, driverRealNum
   var booking = {
       passenger: {
         realNumber: passengerRealNumber,
-        lvn: this.provisionedNumbers[0],
-        name: 'Passenger'
+        lvn: this.provisionedNumbers[0]
       },
       driver: {
         realNumber: driverRealNumber,
-        lvn: this.provisionedNumbers[1],
-        name: 'Driver'
+        lvn: this.provisionedNumbers[1]
       },
       messages: []
   };
   
   this.bookings.push(booking);
+  
+  // Send the driver a booking information
+  // From the passenger virtual number
+  // To the driver real number
+  nexmo.message.sendSms(booking.passenger.lvn,
+                        booking.driver.realNumber,
+                        'Booking request: \n' + 
+                        details + '\n' +
+                        'Reply to this message to contact the passenger');
+
+  // Send the passenger a booking confirmation
+  // From the driver virtual number
+  // To the passenger real number                        
+  nexmo.message.sendSms(booking.driver.lvn,
+                        booking.passenger.realNumber,
+                        'Your booking has been confirmed\n' + 
+                        details + '\n' +
+                        'Reply to this message to contact the driver');
 };
 
 var fromPassengerToDriver = function(from, to, booking) {
@@ -117,7 +133,7 @@ TaxiSmsProxy.prototype.getProxyRoute = function(from, to) {
   return proxyRoute;
 };
 
-TaxiSmsProxy.prototype.proxySms = function(from, to, message) {  
+TaxiSmsProxy.prototype.proxySms = function(from, to, text) {  
   // Determine how the SMS should be routed
   var proxyRoute = this.getProxyRoute(from, to);
   
@@ -132,16 +148,15 @@ TaxiSmsProxy.prototype.proxySms = function(from, to, message) {
   proxyRoute.booking.messages.push({
     from: from,
     to: to,
-    message: message
+    message: text
   });
   
   // Always send
   // - from the LVN
   // - to the real Number
-  // Prefix the message with the name of the sender to clarify
   nexmo.message.sendSms(proxyRoute.from.lvn,
                         proxyRoute.to.realNumber,
-                        proxyRoute.from.name + ': ' + message);
+                        text);
 };
 
 module.exports = TaxiSmsProxy;

@@ -37,8 +37,21 @@ npm start
 
 The application should be available on <http://localhost:5000>.
 
+If you have not set up predefined numbers you can access <http://localhost:5000/provision> for the application to provision numbers.
+
 ### Using the App
 
-Call one of the virtual numbers that you rented. The call will be tracked and forwarded to the desired destination number.
+Register a conversation with the application so that mappings can be created between real user numbers and Nexmo virtual numbers. This is done by making a `POST` such as the following to <http://localhost:5000/conversation>:
 
-You can see a list of tracked calls by accessing <http://localhost:5000/tracked-calls>.
+```
+POST /conversation HTTP/1.1
+Host: localhost:5000
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+userANumber=USER_A_NUMBER&userBNumber=USER_B_NUMBER
+```
+
+When you do this each of the users will receive a text. Reply to that text will allow the to communicate anonymously with each other.
+
+You can see a list of registered conversations by accessing <http://localhost:5000/conversations>.

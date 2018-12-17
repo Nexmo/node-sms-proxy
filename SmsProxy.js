@@ -74,7 +74,6 @@ class SmsProxy {
                     to: fromUserA ? this.conversation.userB : this.conversation.userA,
                     from: fromUserA ? this.conversation.userA : this.conversation.userB
                 };
-                //break;
             }
         
 

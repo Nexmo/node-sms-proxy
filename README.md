@@ -35,17 +35,17 @@ If preferred you can set previously provisioned numbers in the `PROVISIONED_NUMB
 npm start
 ```
 
-The application should be available on <http://localhost:5000>.
+The application should be available on <http://localhost:3000>.
 
-If you have not set up predefined numbers you can access <http://localhost:5000/provision> for the application to provision numbers.
+If you have not set up predefined numbers you can access <http://localhost:3000/provision> for the application to provision numbers.
 
 ### Using the App
 
-Register a conversation with the application so that mappings can be created between real user numbers and Nexmo virtual numbers. This is done by making a `POST` such as the following to <http://localhost:5000/conversation>:
+Register a conversation with the application so that mappings can be created between real user numbers and Nexmo virtual numbers. This is done by making a `POST` such as the following to <http://localhost:3000/conversation>:
 
 ```
 POST /conversation HTTP/1.1
-Host: localhost:5000
+Host: localhost:3000
 Cache-Control: no-cache
 Content-Type: application/x-www-form-urlencoded
 
@@ -54,4 +54,4 @@ userANumber=USER_A_NUMBER&userBNumber=USER_B_NUMBER
 
 When you do this each of the users will receive a text. Reply to that text will allow the to communicate anonymously with each other.
 
-You can see a list of registered conversations by accessing <http://localhost:5000/conversations>.
+You can see a list of registered conversations by accessing <http://localhost:3000/conversations>.

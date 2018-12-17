@@ -2,9 +2,9 @@
   "name": "sms-proxy",
   "version": "0.1.0",
   "description": "An example SMS Proxy application to allow two users to anonymously communicate with each other via SMS.",
-  "main": "./lib/server.js",
+  "main": "./server.js",
   "scripts": {
-    "start": "nodemon ./lib/server.js",
+    "start": "nodemon ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

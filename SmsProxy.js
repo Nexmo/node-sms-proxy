@@ -63,6 +63,7 @@ class SmsProxy {
 
         if (destinationRealNumber  === null) {
             console.log(`No chat found for ${proxyRoute}`);
+            return;
         }
 
         // Send the SMS from the virtual number to the real number

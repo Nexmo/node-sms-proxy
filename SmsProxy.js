@@ -4,30 +4,22 @@ const Nexmo = require('nexmo');
 
 class SmsProxy {
 
-    /**
-     * Create a new SmsProxy
-     */
-    constructor(config) {
-
-        this.config = config;
-
+    constructor() {
         this.nexmo = new Nexmo({
-            apiKey: this.config.NEXMO_API_KEY,
-            apiSecret: this.config.NEXMO_API_SECRET
+            apiKey: process.env.NEXMO_API_KEY,
+            apiSecret: process.env.NEXMO_API_SECRET
         }, {
                 debug: true
             });
     }
 
-    createConversation(userANumber, userBNumber) {
-        this.conversation = {
+    createChat(userANumber, userBNumber) {
+        this.chat = {
             userA: {
-                realNumber: userANumber,
-                virtualNumber: this.config.VIRTUAL_NUMBER_A
+                realNumber: userANumber
             },
             userB: {
-                realNumber: userBNumber,
-                virtualNumber: this.config.VIRTUAL_NUMBER_B
+                realNumber: userBNumber
             }
         };
 
@@ -35,68 +27,48 @@ class SmsProxy {
     }
 
     sendSMS() {
-        // Send UserA conversation information
-        // From the UserB virtual number
-        // To the UserA real number
-        console.log(this.conversation);
+        /*  Send UserA chat information
+            from the virtual number
+            to UserA's real number */
+        this.nexmo.message.sendSms(this.chat.userB.realNumber,
+                                   process.env.VIRTUAL_NUMBER,
+                                   'Reply to this SMS to talk to UserB');
 
-        this.nexmo.message.sendSms(this.conversation.userB.virtualNumber,
-            this.conversation.userA.realNumber,
-            'Reply to this SMS to talk to UserB');
-
-        // Send UserB conversation information
-        // From the UserA virtual number
-        // To the UserB real number
-        this.nexmo.message.sendSms(this.conversation.userA.virtualNumber,
-            this.conversation.userB.realNumber,
-            'Reply to this SMS to talk to UserA');
+        /*  Send UserB chat information
+            from the virtual number
+            to UserB's real number */
+        this.nexmo.message.sendSms(this.chat.userA.realNumber,
+                                   process.env.VIRTUAL_NUMBER,
+                                   'Reply to this SMS to talk to UserA');
     }
 
-    fromUserAToUserB(from, to, conversation) {
-        return (from === this.conversation.userA.realNumber &&
-            to === this.conversation.userB.virtualNumber);
-    }
 
-    fromUserBToUserA(from, to, conversation) {
-        return (from === this.conversation.userB.realNumber &&
-            to === this.conversation.userA.virtualNumber);
-    }
+    getDestinationRealNumber(from) {
+        let destinationRealNumber = null;
 
-    getProxyRoute(from, to) {
-        let proxyRoute = null;
+        // Use `from` numbers to work out who is sending to whom
+        const fromUserA = (from === this.chat.userA.realNumber);
+        const fromUserB = (from === this.chat.userB.realNumber);
 
-            // Use to and from numbers to work out who is sending to whom
-            const fromUserA = this.fromUserAToUserB(from, to, this.conversation);
-            const fromUserB = this.fromUserBToUserA(from, to, this.conversation);
-
-            if (fromUserA || fromUserB) {
-                proxyRoute = {
-                    to: fromUserA ? this.conversation.userB : this.conversation.userA,
-                    from: fromUserA ? this.conversation.userA : this.conversation.userB
-                };
-            }
-        
-
-        return proxyRoute;
-    }
-
-    proxySms(from, to, text) {
-        // Determine how the SMS should be routed
-        const proxyRoute = this.getProxyRoute(from, to);
-        console.log(proxyRoute)
-
-        if (proxyRoute === null) {
-            const errorText = 'No conversation found' +
-                ' from: ' + from +
-                ' to: ' + to;
-            throw new Error(errorText);
+        if (fromUserA || fromUserB) {
+            destinationRealNumber = fromUserA ? this.chat.userB.realNumber : this.chat.userA.realNumber;
         }
 
-        // Always send
-        // - from the virtual number
-        // - to the real number
-        this.nexmo.message.sendSms(proxyRoute.from.virtualNumber,
-            proxyRoute.to.realNumber, text);
+        return destinationRealNumber;
+    }
+
+    proxySms(from, text) {
+        // Determine which real number to send the SMS to
+        const destinationRealNumber = this.getDestinationRealNumber(from);
+
+        if (destinationRealNumber  === null) {
+            console.log(`No chat found for ${proxyRoute}`);
+        }
+
+        // Send the SMS from the virtual number to the real number
+        this.nexmo.message.sendSms(process.env.VIRTUAL_NUMBER,
+                                   destinationRealNumber,
+                                   text);
     }
 
 }

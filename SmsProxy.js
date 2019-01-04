@@ -15,12 +15,8 @@ class SmsProxy {
 
     createChat(userANumber, userBNumber) {
         this.chat = {
-            userA: {
-                realNumber: userANumber
-            },
-            userB: {
-                realNumber: userBNumber
-            }
+            userA: userANumber,
+            userB: userBNumber
         };
 
         this.sendSMS();
@@ -30,14 +26,14 @@ class SmsProxy {
         /*  Send UserA chat information
             from the virtual number
             to UserA's real number */
-        this.nexmo.message.sendSms(this.chat.userB.realNumber,
+        this.nexmo.message.sendSms(this.chat.userB,
                                    process.env.VIRTUAL_NUMBER,
                                    'Reply to this SMS to talk to UserB');
 
         /*  Send UserB chat information
             from the virtual number
             to UserB's real number */
-        this.nexmo.message.sendSms(this.chat.userA.realNumber,
+        this.nexmo.message.sendSms(this.chat.userA,
                                    process.env.VIRTUAL_NUMBER,
                                    'Reply to this SMS to talk to UserA');
     }
@@ -47,11 +43,11 @@ class SmsProxy {
         let destinationRealNumber = null;
 
         // Use `from` numbers to work out who is sending to whom
-        const fromUserA = (from === this.chat.userA.realNumber);
-        const fromUserB = (from === this.chat.userB.realNumber);
+        const fromUserA = (from === this.chat.userA);
+        const fromUserB = (from === this.chat.userB);
 
         if (fromUserA || fromUserB) {
-            destinationRealNumber = fromUserA ? this.chat.userB.realNumber : this.chat.userA.realNumber;
+            destinationRealNumber = fromUserA ? this.chat.userB : this.chat.userA;
         }
 
         return destinationRealNumber;

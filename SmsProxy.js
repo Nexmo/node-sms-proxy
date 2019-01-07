@@ -58,7 +58,7 @@ class SmsProxy {
         const destinationRealNumber = this.getDestinationRealNumber(from);
 
         if (destinationRealNumber  === null) {
-            console.log(`No chat found for ${proxyRoute}`);
+            console.log(`No chat found for this number`);
             return;
         }
 

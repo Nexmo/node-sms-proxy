@@ -25,9 +25,11 @@ Rename the config file:
 mv example.env .env
 ```
 
-Fill in the values in `.env` as appropriate.
+Fill in the values in `.env` as appropriate; this will be your API key and secret, and the Nexmo number you want to use.
 
-If you do not have numbers to use as virtual numbers, purchase two in the [dashboard](https://dashboard.nexmo.xom) and configure them in `.env`.
+If you do not have a virtual number, you can purchase one via the [dashboard](https://dashboard.nexmo.com).
+
+Configure the number's SMS webhook URL to point to your application (if you are using [ngrok](https://ngrok.com) then start your tunnel now), e.g. `https://abcd1234.ngrok.io/webhooks/inbound-sms`
 
 ### Running the App
 
@@ -37,14 +39,15 @@ npm start
 
 The application should be available on `http://localhost:3000`.
 
+> To change the port, try `PORT=3001 npm start` as an alternative command
 
 ### Using the App
 
-Register a conversation with the application so that mappings can be created between real user numbers and Nexmo virtual numbers. This is done by making a `POST` such as the following to `http://localhost:3000/conversation`
+Register a conversation with the application so that mappings can be created between real user numbers and Nexmo virtual numbers. This is done by making a `POST` such as the following to `http://localhost:3000/chat`
  and replacing `USER_A_NUMBER` and `USER_B_NUMBER` with the real numbers of the parties involved:
 
 ```
-POST /conversation HTTP/1.1
+POST /chat HTTP/1.1
 Host: localhost:3000
 Cache-Control: no-cache
 Content-Type: application/x-www-form-urlencoded

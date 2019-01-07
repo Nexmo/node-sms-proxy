@@ -18,10 +18,10 @@ app.get('/', (req, res) => {
 })
 
 // Handle and route incoming SMS to virtual numbers
-app.post('/webhooks/inbound-sms', (req, res) => {
-    const from = req.body.msisdn;
-    const to = req.body.to;
-    const text = req.body.text;
+app.get('/webhooks/inbound-sms', (req, res) => {
+    const from = req.query.msisdn;
+    const to = req.query.to;
+    const text = req.query.text;
 
     // Route virtual number to real number
     smsProxy.proxySms(from, text);
@@ -42,6 +42,7 @@ app.post('/chat', (req, res) => {
             res.json(result);
         }
     });
+    res.send('OK');
 
 });
 

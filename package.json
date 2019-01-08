@@ -2,26 +2,25 @@
   "name": "sms-proxy",
   "version": "0.1.0",
   "description": "An example SMS Proxy application to allow two users to anonymously communicate with each other via SMS.",
-  "main": "./lib/server.js",
+  "main": "./server.js",
   "scripts": {
-    "start": "nodemon ./lib/server.js",
+    "start": "node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "sms",
-    "proxy",
-    "nexmo"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nexmo/node-sms-proxy.git"
+  },
   "author": "Phil Leggetter <phil@leggetter.co.uk> (http://www.leggetter.co.uk)",
   "license": "MIT",
-  "dependencies": {
-    "bluebird": "^3.4.3",
-    "body-parser": "^1.15.2",
-    "dotenv": "^2.0.0",
-    "express": "^4.14.0",
-    "nexmo": "^1.0.0-beta-5"
+  "bugs": {
+    "url": "https://github.com/Nexmo/node-sms-proxy/issues"
   },
-  "devDependencies": {
-    "nodemon": "^1.10.2"
+  "homepage": "https://github.com/Nexmo/node-sms-proxy#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "nexmo": "^2.4.0"
   }
 }

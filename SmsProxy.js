@@ -23,19 +23,19 @@ class SmsProxy {
     }
 
     sendSMS() {
-        /*  Send UserA chat information
-            from the virtual number
-            to UserA's real number */
-        this.nexmo.message.sendSms(this.chat.userB,
-                                   process.env.VIRTUAL_NUMBER,
-                                   'Reply to this SMS to talk to UserB');
-
-        /*  Send UserB chat information
-            from the virtual number
-            to UserB's real number */
+        /*  
+            Send a message from userA to the virtual number
+        */
         this.nexmo.message.sendSms(this.chat.userA,
-                                   process.env.VIRTUAL_NUMBER,
-                                   'Reply to this SMS to talk to UserA');
+                                    process.env.VIRTUAL_NUMBER,
+                                    'Reply to this SMS to talk to UserA');
+
+        /*  
+            Send a message from userB to the virtual number
+        */
+        this.nexmo.message.sendSms(this.chat.userB,
+                                    process.env.VIRTUAL_NUMBER,
+                                    'Reply to this SMS to talk to UserB');
     }
 
 
